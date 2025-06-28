@@ -1,0 +1,30 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="highminded.ui.controls.SettingsUserControl">
+
+    <Grid Margin="15" RowSpacing="10" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*">
+        
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <TextBlock Text="Model" />
+            <TextBox Name="ModelTextBox" />
+        </StackPanel>
+        
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <TextBlock Text="API URL" />
+            <TextBox Name="ApiUrlTextBox" />
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Text="API Key" />
+            <TextBox Name="ApiKeyTextBox" PasswordChar="*" />
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button Name="SaveSettingsBtn" Content="Save" Click="SaveSettingsBtn_OnClick"/>
+        </StackPanel> 
+        
+    </Grid>
+</UserControl>
