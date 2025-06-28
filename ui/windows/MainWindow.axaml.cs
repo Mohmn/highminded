@@ -164,4 +164,9 @@ public partial class MainWindow : Window
             }
         }
     }
+
+    private void HideBtnClick(object? sender, RoutedEventArgs e)
+    {
+        Hide();
+    }
 }

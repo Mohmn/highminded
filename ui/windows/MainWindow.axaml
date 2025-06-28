@@ -29,7 +29,7 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
                                     Spacing="5" Margin="10 0">
                             <TextBlock FontSize="12" Text="Hide:" />
-                            <TextBlock FontSize="12" Text="CTRL + \" />
+                            <TextBlock FontSize="12" Text="SHIFT + \" />
                         </StackPanel>
                     </Border>
                     <Button Name="ChatBtn" Background="Transparent" Click="ChatBtnClick">
@@ -38,8 +38,8 @@
                     <Button Name="SettingsBtn" Background="Transparent" Click="SettingBtnClick">
                         <iconPacks:PackIconLucide Grid.Column="1" Kind="Settings" Height="16" Width="16" />
                     </Button>
-                    <Button Name="HideBtn" Background="Transparent">
-                        <iconPacks:PackIconLucide Grid.Column="1" Kind="X" Height="13" Width="13" />
+                    <Button Name="HideBtn" Background="Transparent" Click="HideBtnClick">
+                        <iconPacks:PackIconLucide Grid.Column="1" Kind="X" Height="13" Width="13"/>
                     </Button>
 
                 </StackPanel>
