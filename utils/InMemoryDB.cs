@@ -14,7 +14,7 @@ public class InMemoryDb
     private InMemoryDb()
     {
         SettingsManager = new SettingsManager<AppSettings>();
-        if (SettingsManager.Settings.ApiKey != string.Empty)
+        if (SettingsManager.Settings.ApiKey != null)
         {
             InitOpenAIClient();
         }

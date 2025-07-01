@@ -20,7 +20,7 @@ public class SettingsManager<T> where T : class, new()
     public SettingsManager(string appName = "highminded")
     {
        _settingsPath = Path.Combine(Environment.CurrentDirectory, "settings.json");
-       Settings = Load();
+        Settings = Load();
     } 
     
     private T Load()
