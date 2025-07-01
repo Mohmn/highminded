@@ -19,10 +19,7 @@ public class SettingsManager<T> where T : class, new()
 
     public SettingsManager(string appName = "highminded")
     {
-        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var appFolder = Path.Combine(appData, appName);
-        Directory.CreateDirectory(appFolder);
-       _settingsPath = Path.Combine(appFolder, "settings.json");
+       _settingsPath = Path.Combine(Environment.CurrentDirectory, "settings.json");
        Settings = Load();
     } 
     

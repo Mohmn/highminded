@@ -14,22 +14,11 @@ namespace highminded.ui.controls;
 public partial class ChatUserControl : UserControl
 {
     
-    // OpenAI
-    private readonly OpenAI.Chat.ChatClient _client = null!;
     private readonly MarkdownPipeline _pipeline = null!; 
     
     public ChatUserControl()
     {
         InitializeComponent();
-        
-        _client = new ChatClient(
-            model: InMemoryDb.Obj.settingsManager.Settings.Model,
-            credential: new ApiKeyCredential(InMemoryDb.Obj.settingsManager.Settings.ApiKey),
-            options: new OpenAIClientOptions
-            {
-                Endpoint = new Uri(InMemoryDb.Obj.settingsManager.Settings.ApiURL)
-            });
-
         _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build(); 
     }
     
@@ -44,7 +33,7 @@ public partial class ChatUserControl : UserControl
             PromptBox.Clear();
 
             AsyncCollectionResult<StreamingChatCompletionUpdate> completionUpdates =
-                _client.CompleteChatStreamingAsync(prompt);
+                InMemoryDb.Obj.ChatClient.CompleteChatStreamingAsync(prompt);
 
             var responseBuilder = new StringBuilder();
 

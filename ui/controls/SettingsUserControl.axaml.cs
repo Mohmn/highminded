@@ -1,10 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
-using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using highminded.utils;
 
 namespace highminded.ui.controls;
@@ -15,16 +10,16 @@ public partial class SettingsUserControl : UserControl
     {
         InitializeComponent();
 
-        ModelTextBox.Text = InMemoryDb.Obj.settingsManager.Settings.Model;
-        ApiUrlTextBox.Text = InMemoryDb.Obj.settingsManager.Settings.ApiURL;
-        ApiKeyTextBox.Text = InMemoryDb.Obj.settingsManager.Settings.ApiKey;
+        ModelTextBox.Text = InMemoryDb.Obj.SettingsManager.Settings.Model;
+        ApiUrlTextBox.Text = InMemoryDb.Obj.SettingsManager.Settings.ApiURL;
+        ApiKeyTextBox.Text = InMemoryDb.Obj.SettingsManager.Settings.ApiKey;
     }
 
     private void SaveSettingsBtn_OnClick(object? sender, RoutedEventArgs e)
     {
-        InMemoryDb.Obj.settingsManager.Settings.Model = ModelTextBox.Text;
-        InMemoryDb.Obj.settingsManager.Settings.ApiURL= ApiUrlTextBox.Text;
-        InMemoryDb.Obj.settingsManager.Settings.ApiKey = ApiKeyTextBox.Text;
-       InMemoryDb.Obj.settingsManager.Save(); 
+        InMemoryDb.Obj.SaveSettings(new AppSettings()
+        {
+            ApiKey = ApiKeyTextBox.Text, ApiURL = ApiUrlTextBox.Text, Model = ModelTextBox.Text
+        });
     }
 }
