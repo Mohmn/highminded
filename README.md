@@ -9,6 +9,10 @@
   </p>
 </div>
 
+<div align="center">
+  <img alt="highminded-screenshot" src="https://github.com/user-attachments/assets/eca4624f-9194-4c02-8e72-b42979c23cb5" />
+</div>
+
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 - [Features](#features)
