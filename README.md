@@ -33,11 +33,11 @@ Get the appropriate binary for your platform from the [release page](https://git
 <!-- KEYBINDINGS -->
 ## Keybindings
 
-| Bind | Action |
-| ---- | ------ |
-| `Shift` + `\` | Toggle Window Visibility |
-| `Shift` + `S` | Capture screenshot and send to LLM |
-| `Ctrl` + `Alt` + `Shift`  `H` | Make windows visible to screenshare |
+| Bind | Action                                                                                                         |
+| ---- |----------------------------------------------------------------------------------------------------------------|
+| `Shift` + `\` | Toggle Window Visibility                                                                                       |
+| `Shift` + `S` | Capture screenshot and send to LLM                                                                             |
+| `Ctrl` + `Alt` + `Shift`  `H` | Make windows visible to screenshare.<br> **Note: Application restart is required to make it invisible again.** |
 
 <!-- CONTRIBUTING -->
 ## Contributing
