@@ -25,25 +25,34 @@ public partial class ChatUserControl : UserControl
 
     public async void SendScreenshot()
     {
-        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var fileName = $"screenshot_{timestamp}.png";
-        var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+        try
+        {
 
-        var screenshot = await ScreenCapture.CaptureScreenAsync(filePath);
-        if (!screenshot) return;
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var fileName = $"screenshot_{timestamp}.png";
+            var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
 
-        using Stream imageStream = File.OpenRead(filePath);
-        BinaryData imageBytes = BinaryData.FromStream(imageStream);
+            var screenshot = await ScreenCapture.CaptureScreenAsync(filePath);
+            if (!screenshot) throw new Exception("Failed to capture screenshot");
 
-        List<ChatMessage> messages =
-        [
-            new UserChatMessage(
-                ChatMessageContentPart.CreateTextPart("I'm attaching a screenshot of a problem. I want you to read it and give me the appropriate answer."),
-                ChatMessageContentPart.CreateImagePart(imageBytes, "image/png")
-            )
-        ];
+            await using Stream imageStream = File.OpenRead(filePath);
+            var imageBytes = await BinaryData.FromStreamAsync(imageStream);
 
-        await ProcessChatStreamAsync(messages);
+            List<ChatMessage> messages =
+            [
+                new UserChatMessage(
+                    ChatMessageContentPart.CreateTextPart(
+                        "I'm attaching a screenshot of a problem. I want you to read it and give me the appropriate answer."),
+                    ChatMessageContentPart.CreateImagePart(imageBytes, "image/png")
+                )
+            ];
+
+            await ProcessChatStreamAsync(messages);
+        }
+        catch (Exception err)
+        {
+            ResultBlock.Text = err.Message;
+        }
     }
 
     private async void PromptBox_OnKeyDown(object? sender, KeyEventArgs e)
