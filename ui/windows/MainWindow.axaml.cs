@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using System;
+using System.Net.Quic;
 using System.Runtime.InteropServices;
+using Avalonia;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -81,6 +83,7 @@ public partial class MainWindow : Window
         bool hasH = e.Data.KeyCode == KeyCode.VcH;
         bool hasBackslash = e.Data.KeyCode == KeyCode.VcBackslash;
         bool hasS = e.Data.KeyCode == KeyCode.VcS;
+        bool hasQ = e.Data.KeyCode == KeyCode.VcQ;
 
         if (hasCtrl && hasShift && hasAlt && hasH)
         {
@@ -90,6 +93,11 @@ public partial class MainWindow : Window
         if (hasShift && hasS)
         {
             Dispatcher.UIThread.Post(() => { _chatUserControl.SendScreenshot(); });
+        }
+
+        if (hasAlt && hasShift && hasQ)
+        {
+            Dispatcher.UIThread.Post(() => { Environment.Exit(0); });
         }
 
         if (hasShift && hasBackslash)
