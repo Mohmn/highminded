@@ -34,9 +34,7 @@ public class InMemoryDb
 
     public void SaveSettings(AppSettings settings)
     {
-        SettingsManager.Settings.ApiKey = settings.ApiKey;
-        SettingsManager.Settings.ApiURL = settings.ApiURL;
-        SettingsManager.Settings.Model = settings.Model;
+        SettingsManager.Settings = settings;
         SettingsManager.Save();
         InitOpenAIClient();
     }

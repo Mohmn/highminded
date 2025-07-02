@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="highminded.ui.controls.SettingsUserControl">
 
-    <Grid Margin="15" RowSpacing="10" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*">
+    <Grid Margin="15" RowSpacing="10" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
         
         <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock Text="Model" />
@@ -23,6 +23,11 @@
         </StackPanel>
         
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Text="Screenshot Prompt" />
+            <TextBox Name="ScreenshotPromptTextBox" TextWrapping="Wrap"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
             <Button Name="SaveSettingsBtn" Content="Save" Click="SaveSettingsBtn_OnClick"/>
         </StackPanel> 
         

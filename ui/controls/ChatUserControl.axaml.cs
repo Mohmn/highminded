@@ -27,7 +27,6 @@ public partial class ChatUserControl : UserControl
     {
         try
         {
-
             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             var fileName = $"screenshot_{timestamp}.png";
             var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
@@ -41,8 +40,7 @@ public partial class ChatUserControl : UserControl
             List<ChatMessage> messages =
             [
                 new UserChatMessage(
-                    ChatMessageContentPart.CreateTextPart(
-                        "I'm attaching a screenshot of a problem. I want you to read it and give me the appropriate answer."),
+                    ChatMessageContentPart.CreateTextPart(InMemoryDb.Obj.SettingsManager.Settings.ScreenshotPrompt),
                     ChatMessageContentPart.CreateImagePart(imageBytes, "image/png")
                 )
             ];

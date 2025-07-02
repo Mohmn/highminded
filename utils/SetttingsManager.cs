@@ -9,13 +9,14 @@ public class AppSettings
     public string Model { get; set; }
     public string ApiURL { get; set; }
     public string ApiKey { get; set; }
+    public string ScreenshotPrompt { get; set; }
     
 }
 
 public class SettingsManager<T> where T : class, new()
 {
     private readonly string _settingsPath;
-    public T Settings { get; private set; }
+    public T Settings { get; internal set; }
 
     public SettingsManager(string appName = "highminded")
     {
