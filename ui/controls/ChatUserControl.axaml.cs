@@ -1,11 +1,13 @@
 ﻿using Avalonia.Controls;
 using System;
 using System.ClientModel;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Avalonia.Input;
 using highminded.utils;
 using OpenAI.Chat;
-using OpenAI;
 using Markdig;
 using Markdown.ColorCode;
 
@@ -13,15 +15,37 @@ namespace highminded.ui.controls;
 
 public partial class ChatUserControl : UserControl
 {
-    
-    private readonly MarkdownPipeline _pipeline = null!; 
-    
+    private readonly MarkdownPipeline _pipeline = null!;
+
     public ChatUserControl()
     {
         InitializeComponent();
-        _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build(); 
+        _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build();
     }
-    
+
+    public async void SendScreenshot()
+    {
+        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        var fileName = $"screenshot_{timestamp}.png";
+        var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+
+        var screenshot = await ScreenCapture.CaptureScreenAsync(filePath);
+        if (!screenshot) return;
+
+        using Stream imageStream = File.OpenRead(filePath);
+        BinaryData imageBytes = BinaryData.FromStream(imageStream);
+
+        List<ChatMessage> messages =
+        [
+            new UserChatMessage(
+                ChatMessageContentPart.CreateTextPart("I'm attaching a screenshot of a problem. I want you to read it and give me the appropriate answer."),
+                ChatMessageContentPart.CreateImagePart(imageBytes, "image/png")
+            )
+        ];
+
+        await ProcessChatStreamAsync(messages);
+    }
+
     private async void PromptBox_OnKeyDown(object? sender, KeyEventArgs e)
     {
         try
@@ -32,25 +56,34 @@ public partial class ChatUserControl : UserControl
             if (prompt is null) return;
             PromptBox.Clear();
 
-            AsyncCollectionResult<StreamingChatCompletionUpdate> completionUpdates =
-                InMemoryDb.Obj.ChatClient.CompleteChatStreamingAsync(prompt);
-
-            var responseBuilder = new StringBuilder();
-
-            await foreach (var completionUpdate in completionUpdates)
-            {
-                if (completionUpdate.ContentUpdate.Count <= 0) continue;
-
-                var token = completionUpdate.ContentUpdate[0].Text;
-                responseBuilder.Append(token);
-
-                var html = Markdig.Markdown.ToHtml(responseBuilder.ToString(), _pipeline);
-                ResultBlock.Text = html;
-            }
+            await ProcessChatStreamAsync(prompt);
         }
         catch (Exception err)
         {
             ResultBlock.Text = err.Message;
+        }
+    }
+
+    private async Task ProcessChatStreamAsync(object promptOrMessages)
+    {
+        AsyncCollectionResult<StreamingChatCompletionUpdate> completionUpdates = promptOrMessages switch
+        {
+            string prompt => InMemoryDb.Obj.ChatClient.CompleteChatStreamingAsync(prompt),
+            IEnumerable<ChatMessage> messages => InMemoryDb.Obj.ChatClient.CompleteChatStreamingAsync(messages),
+            _ => throw new ArgumentException("Invalid input type", nameof(promptOrMessages))
+        };
+
+        var responseBuilder = new StringBuilder();
+
+        await foreach (var completionUpdate in completionUpdates)
+        {
+            if (completionUpdate.ContentUpdate.Count <= 0) continue;
+
+            var token = completionUpdate.ContentUpdate[0].Text;
+            responseBuilder.Append(token);
+
+            var html = Markdig.Markdown.ToHtml(responseBuilder.ToString(), _pipeline);
+            ResultBlock.Text = html;
         }
     }
 }
