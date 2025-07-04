@@ -10,7 +10,8 @@ public class AppSettings
     public string ApiURL { get; set; }
     public string ApiKey { get; set; }
     public string ScreenshotPrompt { get; set; }
-    
+    public string AudioPrompt { get; set; }
+
 }
 
 public class SettingsManager<T> where T : class, new()

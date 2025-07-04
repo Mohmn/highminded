@@ -21,13 +21,18 @@
             <TextBlock Text="API Key" />
             <TextBox Name="ApiKeyTextBox" PasswordChar="*" />
         </StackPanel>
-        
-        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-            <TextBlock Text="Screenshot Prompt" />
-            <TextBox Name="ScreenshotPromptTextBox" TextWrapping="Wrap"/>
-        </StackPanel>
-        
-        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+
+      <StackPanel Grid.Row="2" Grid.Column="0">
+        <TextBlock Text="Screenshot Prompt" />
+        <TextBox Name="ScreenshotPromptTextBox" TextWrapping="Wrap"/>
+      </StackPanel>
+
+      <StackPanel Grid.Row="2" Grid.Column="1">
+        <TextBlock Text="Audio Prompt" />
+        <TextBox Name="AudioPromptTextbox" TextWrapping="Wrap"/>
+      </StackPanel>
+      
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
             <Button Name="SaveSettingsBtn" Content="Save" Click="SaveSettingsBtn_OnClick"/>
         </StackPanel> 
         

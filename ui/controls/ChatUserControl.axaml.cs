@@ -10,18 +10,75 @@ using highminded.utils;
 using OpenAI.Chat;
 using Markdig;
 using Markdown.ColorCode;
+using System.Net.Http;
 
 namespace highminded.ui.controls;
 
 public partial class ChatUserControl : UserControl
 {
     private readonly MarkdownPipeline _pipeline = null!;
+    private AudioCapture.AudioRecorder? _audioRecorder;
+    private const string AudioFilePath = "output.wav";
 
     public ChatUserControl()
     {
         InitializeComponent();
         _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build();
     }
+ 
+
+    public void StartRecord()
+    {
+        _audioRecorder = new AudioCapture.AudioRecorder(AudioFilePath);
+        _audioRecorder.StartRecording();
+    }
+
+    public void StopRecord()
+    {
+        if (_audioRecorder != null)
+        {
+            _audioRecorder.StopRecording();
+            OnRecordingStopped(null, EventArgs.Empty); // Manually invoke the method after stopping the recording kyuki already in use bata ra hai
+        }
+    }
+
+    private void OnRecordingStopped(object? sender, EventArgs e)
+    {
+        _audioRecorder = null;
+        SendAudio(); 
+    }
+    public async void SendAudio()
+    {
+        try
+        {
+            if (!File.Exists("output.wav"))
+                throw new Exception("Audio file not found");
+
+            
+             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+             var fileName = "output.wav";
+             var destPath = Path.Combine(Environment.CurrentDirectory, fileName);
+             File.Copy("output.wav", destPath, true);
+
+            await using Stream audioStream = File.OpenRead("output.wav");
+            var audioBytes = await BinaryData.FromStreamAsync(audioStream);
+
+            List<ChatMessage> messages =
+            [
+                new UserChatMessage(
+                    ChatMessageContentPart.CreateTextPart(InMemoryDb.Obj.SettingsManager.Settings.AudioPrompt),
+                    ChatMessageContentPart.CreateInputAudioPart(audioBytes, "audio/wav")
+                )
+            ];
+
+            await ProcessChatStreamAsync(messages);
+        }
+        catch (Exception err)
+        {
+            ResultBlock.Text = err.Message;
+        }
+    }
+
 
     public async void SendScreenshot()
     {

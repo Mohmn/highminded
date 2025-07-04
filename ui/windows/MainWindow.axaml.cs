@@ -82,6 +82,7 @@ public partial class MainWindow : Window
         bool hasShift = (e.RawEvent.Mask & EventMask.Shift) != EventMask.None;
         bool hasH = e.Data.KeyCode == KeyCode.VcH;
         bool hasBackslash = e.Data.KeyCode == KeyCode.VcBackslash;
+        bool hasA = e.Data.KeyCode == KeyCode.VcA;
         bool hasS = e.Data.KeyCode == KeyCode.VcS;
         bool hasQ = e.Data.KeyCode == KeyCode.VcQ;
 
@@ -94,6 +95,20 @@ public partial class MainWindow : Window
         {
             Dispatcher.UIThread.Post(() => { _chatUserControl.SendScreenshot(); });
         }
+        if (hasAlt && hasA)
+        {
+            Dispatcher.UIThread.Post(() => { _chatUserControl.StartRecord(); });
+        }
+
+        if (hasAlt && hasShift && hasA)
+        {
+            Dispatcher.UIThread.Post(() => { _chatUserControl.StopRecord(); });
+        }
+
+       /* if (hasShift && hasA)
+        {
+            Dispatcher.UIThread.Post(() => { _chatUserControl.SendAudio(); });
+        }*/
 
         if (hasAlt && hasShift && hasQ)
         {
