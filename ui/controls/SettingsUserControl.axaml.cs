@@ -14,6 +14,7 @@ public partial class SettingsUserControl : UserControl
         ApiUrlTextBox.Text = InMemoryDb.Obj.SettingsManager.Settings.ApiURL;
         ApiKeyTextBox.Text = InMemoryDb.Obj.SettingsManager.Settings.ApiKey;
         ScreenshotPromptTextBox.Text = InMemoryDb.Obj.SettingsManager.Settings.ScreenshotPrompt;
+        AudioPromptTextbox.Text = InMemoryDb.Obj.SettingsManager.Settings.AudioPrompt;
     }
 
     private void SaveSettingsBtn_OnClick(object? sender, RoutedEventArgs e)
@@ -21,7 +22,7 @@ public partial class SettingsUserControl : UserControl
         InMemoryDb.Obj.SaveSettings(new AppSettings()
         {
             ApiKey = ApiKeyTextBox.Text, ApiURL = ApiUrlTextBox.Text, Model = ModelTextBox.Text,
-            ScreenshotPrompt = ScreenshotPromptTextBox.Text
+            ScreenshotPrompt = ScreenshotPromptTextBox.Text, AudioPrompt = AudioPromptTextbox.Text
         });
     }
 }

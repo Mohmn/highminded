@@ -25,7 +25,6 @@ public partial class ChatUserControl : UserControl
         InitializeComponent();
         _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build();
     }
- 
 
     public void StartRecord()
     {
@@ -38,15 +37,16 @@ public partial class ChatUserControl : UserControl
         if (_audioRecorder != null)
         {
             _audioRecorder.StopRecording();
-            OnRecordingStopped(null, EventArgs.Empty); // Manually invoke the method after stopping the recording kyuki already in use bata ra hai
+            OnRecordingStopped(null, EventArgs.Empty);
         }
     }
 
     private void OnRecordingStopped(object? sender, EventArgs e)
     {
         _audioRecorder = null;
-        SendAudio(); 
+        SendAudio();
     }
+
     public async void SendAudio()
     {
         try
@@ -54,11 +54,11 @@ public partial class ChatUserControl : UserControl
             if (!File.Exists("output.wav"))
                 throw new Exception("Audio file not found");
 
-            
-             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-             var fileName = "output.wav";
-             var destPath = Path.Combine(Environment.CurrentDirectory, fileName);
-             File.Copy("output.wav", destPath, true);
+
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var fileName = "output.wav";
+            var destPath = Path.Combine(Environment.CurrentDirectory, fileName);
+            File.Copy("output.wav", destPath, true);
 
             await using Stream audioStream = File.OpenRead("output.wav");
             var audioBytes = await BinaryData.FromStreamAsync(audioStream);
@@ -78,7 +78,6 @@ public partial class ChatUserControl : UserControl
             ResultBlock.Text = err.Message;
         }
     }
-
 
     public async void SendScreenshot()
     {

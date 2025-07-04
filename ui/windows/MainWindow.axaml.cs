@@ -95,20 +95,11 @@ public partial class MainWindow : Window
         {
             Dispatcher.UIThread.Post(() => { _chatUserControl.SendScreenshot(); });
         }
-        if (hasAlt && hasA)
+
+        if (hasShift && hasA)
         {
             Dispatcher.UIThread.Post(() => { _chatUserControl.StartRecord(); });
         }
-
-        if (hasAlt && hasShift && hasA)
-        {
-            Dispatcher.UIThread.Post(() => { _chatUserControl.StopRecord(); });
-        }
-
-       /* if (hasShift && hasA)
-        {
-            Dispatcher.UIThread.Post(() => { _chatUserControl.SendAudio(); });
-        }*/
 
         if (hasAlt && hasShift && hasQ)
         {
