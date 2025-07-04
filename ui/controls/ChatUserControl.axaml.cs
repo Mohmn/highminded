@@ -3,6 +3,7 @@ using System;
 using System.ClientModel;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Input;
@@ -10,64 +11,55 @@ using highminded.utils;
 using OpenAI.Chat;
 using Markdig;
 using Markdown.ColorCode;
-using System.Net.Http;
 
 namespace highminded.ui.controls;
 
 public partial class ChatUserControl : UserControl
 {
     private readonly MarkdownPipeline _pipeline = null!;
-    private AudioCapture.AudioRecorder? _audioRecorder;
-    private const string AudioFilePath = "output.wav";
+    private AudioCapture _audioCapture = null!;
 
     public ChatUserControl()
     {
         InitializeComponent();
         _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build();
+        _audioCapture = new AudioCapture();
     }
 
     public void StartRecord()
     {
-        _audioRecorder = new AudioCapture.AudioRecorder(AudioFilePath);
-        _audioRecorder.StartRecording();
+        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        var fileName = $"audio_{timestamp}.wav";
+        var dirPath = Path.Combine(Environment.CurrentDirectory, "audio");
+        var filePath = Path.Combine(dirPath, fileName);
+        Directory.CreateDirectory(dirPath);
+        _audioCapture.StartRecording(filePath);
     }
 
     public void StopRecord()
     {
-        if (_audioRecorder != null)
+        if (_audioCapture != null)
         {
-            _audioRecorder.StopRecording();
-            OnRecordingStopped(null, EventArgs.Empty);
+            _audioCapture.StopRecording();
+            SendAudio();
         }
-    }
-
-    private void OnRecordingStopped(object? sender, EventArgs e)
-    {
-        _audioRecorder = null;
-        SendAudio();
     }
 
     public async void SendAudio()
     {
         try
         {
-            if (!File.Exists("output.wav"))
-                throw new Exception("Audio file not found");
-
-
-            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var fileName = "output.wav";
-            var destPath = Path.Combine(Environment.CurrentDirectory, fileName);
-            File.Copy("output.wav", destPath, true);
-
-            await using Stream audioStream = File.OpenRead("output.wav");
-            var audioBytes = await BinaryData.FromStreamAsync(audioStream);
+            var dirPath = Path.Combine(Environment.CurrentDirectory, "audio");
+            var latestAudio = new DirectoryInfo(dirPath).GetFiles().OrderByDescending(f => f.LastWriteTime).First(); 
+            var filePath = Path.Combine(dirPath, latestAudio.Name);
+            var audioFileBytes = await File.ReadAllBytesAsync(filePath);
+            var audioBytes = BinaryData.FromBytes(audioFileBytes);
 
             List<ChatMessage> messages =
             [
                 new UserChatMessage(
                     ChatMessageContentPart.CreateTextPart(InMemoryDb.Obj.SettingsManager.Settings.AudioPrompt),
-                    ChatMessageContentPart.CreateInputAudioPart(audioBytes, "audio/wav")
+                    ChatMessageContentPart.CreateInputAudioPart(audioBytes, ChatInputAudioFormat.Wav)
                 )
             ];
 
@@ -85,7 +77,9 @@ public partial class ChatUserControl : UserControl
         {
             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             var fileName = $"screenshot_{timestamp}.png";
-            var filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+            var dirPath = Path.Combine(Environment.CurrentDirectory, "images");
+            var filePath = Path.Combine(dirPath, fileName);
+            Directory.CreateDirectory(dirPath);
 
             var screenshot = await ScreenCapture.CaptureScreenAsync(filePath);
             if (!screenshot) throw new Exception("Failed to capture screenshot");

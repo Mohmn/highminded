@@ -1,58 +1,51 @@
-﻿using System;
+﻿using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
 namespace highminded.utils;
 
-public static class AudioCapture
+public class AudioCapture
 {
+    private WasapiLoopbackCapture capture;
+    private WaveFileWriter writer;
+    private string outputFilePath;
 
-    public class AudioRecorder
+    public AudioCapture()
     {
-        private WasapiLoopbackCapture capture;
-        private WaveFileWriter writer;
-        private string outputFilePath;
-        private Action<int> visualCallback;
-        public AudioRecorder(string filePath)
+        capture = new WasapiLoopbackCapture();
+    }
+
+    public void StartRecording(string outPath)
+    {
+        writer = new WaveFileWriter(outPath, capture.WaveFormat);
+        capture.DataAvailable += Capture_DataAvailable;
+        capture.RecordingStopped += Capture_RecordingStopped;
+        capture.StartRecording();
+    }
+
+    public void StopRecording()
+    {
+        capture.StopRecording();
+    }
+
+    public bool IsRecording()
+    {
+        if (capture.CaptureState == CaptureState.Capturing || capture.CaptureState == CaptureState.Starting)
         {
-            outputFilePath = filePath;
-        }
-        public void StartRecording()
-        {
-            capture = new WasapiLoopbackCapture();
-            writer = new WaveFileWriter(outputFilePath, capture.WaveFormat);
-            capture.DataAvailable += Capture_DataAvailable;
-            capture.RecordingStopped += Capture_RecordingStopped;
-            capture.StartRecording();
-        }
-        public void StopRecording()
-        {
-            capture.StopRecording();
-        }
-        private void Capture_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            // Console.WriteLine($"Received {e.BytesRecorded} bytes");
-            writer.Write(e.Buffer, 0, e.BytesRecorded); //dont cram random stuff in this function unless you want delay.
-        }
-        private void Capture_RecordingStopped(object sender, StoppedEventArgs e)
-        {
-            writer.Flush();
-            writer.Dispose();
-            capture.Dispose();
+            return true;
         }
 
+        return false;
     }
-    public static void start_record()
-    {
-        string filePath = "output.wav";
-        AudioRecorder recorder = new AudioRecorder(filePath);
-        recorder.StartRecording();  
-    }
-    public static void stop_record()
-    {
-        string filePath = "output.wav";
-        AudioRecorder recorder = new AudioRecorder(filePath);
-        recorder.StopRecording();
-    }
-    
-} 
 
+    private void Capture_DataAvailable(object sender, WaveInEventArgs e)
+    {
+        writer.Write(e.Buffer, 0, e.BytesRecorded);
+    }
+
+    private void Capture_RecordingStopped(object sender, StoppedEventArgs e)
+    {
+        writer.Flush();
+        writer.Dispose();
+        capture.Dispose();
+    }
+}

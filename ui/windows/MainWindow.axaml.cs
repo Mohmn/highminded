@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using System;
-using System.Net.Quic;
 using System.Runtime.InteropServices;
-using Avalonia;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -44,6 +42,7 @@ public partial class MainWindow : Window
         // Global Hotkey
         _hook.KeyPressed += OnKeyPressed;
         _hook.RunAsync();
+        _chatUserControl.SendAudio();
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
