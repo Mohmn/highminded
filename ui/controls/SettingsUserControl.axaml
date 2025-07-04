@@ -24,12 +24,12 @@
 
       <StackPanel Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="2">
         <TextBlock Text="Screenshot Prompt" />
-        <TextBox Name="ScreenshotPromptTextBox" TextWrapping="Wrap"/>
+        <TextBox Name="ScreenshotPromptTextBox" TextWrapping="Wrap" MinLines="3" MaxLines="3"/>
       </StackPanel>
 
       <StackPanel Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="2">
         <TextBlock Text="Audio Prompt" />
-        <TextBox Name="AudioPromptTextbox" TextWrapping="Wrap"/>
+        <TextBox Name="AudioPromptTextbox" TextWrapping="Wrap" MinLines="3" MaxLines="3"/>
       </StackPanel>
       
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
