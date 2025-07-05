@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <ApplicationIcon>assets\highminded.ico</ApplicationIcon>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
@@ -38,6 +39,10 @@
         <PackageReference Include="SharpHook" Version="6.1.2"/>
         <PackageReference Include="SharpHook.Reactive" Version="6.1.2"/>
         <PackageReference Include="SoundFlow" Version="1.1.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="assets\**"/>
     </ItemGroup>
 
     <ItemGroup>
