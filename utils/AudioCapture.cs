@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using SoundFlow.Backends.MiniAudio;
 using SoundFlow.Components;
 using SoundFlow.Enums;
@@ -7,7 +8,9 @@ namespace highminded.utils;
 
 public class AudioCapture
 {
-    private readonly MiniAudioEngine _audioEngine = new(48000, Capability.Loopback);
+    private readonly MiniAudioEngine _audioEngine =
+        new(48000, OperatingSystem.IsWindows() ? Capability.Loopback : Capability.Mixed);
+
     private Stream? _fileStream;
     private Recorder? _recorder;
 
