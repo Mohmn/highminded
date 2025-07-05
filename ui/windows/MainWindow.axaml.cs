@@ -157,14 +157,24 @@ public partial class MainWindow : Window
             ShowOverlay();
         }
 
-        if (hasShift && hasS)
+        if (hasAlt && hasShift && hasS)
         {
             Dispatcher.UIThread.Post(() => { _chatUserControl.SendScreenshot(); });
         }
 
-        if (hasShift && hasA)
+        if (hasAlt && hasShift && hasA)
         {
-            Dispatcher.UIThread.Post(() => { _chatUserControl.StartRecord(); });
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (!InMemoryDb.Obj.MainViewModel.IsRecording)
+                {
+                    _chatUserControl.StartRecord();
+                }
+                else
+                {
+                    _chatUserControl.StopRecord();
+                }
+            });
         }
 
         if (hasAlt && hasShift && hasQ)
@@ -172,7 +182,7 @@ public partial class MainWindow : Window
             Dispatcher.UIThread.Post(() => { Environment.Exit(0); });
         }
 
-        if (hasShift && hasBackslash)
+        if (hasAlt && hasShift && hasBackslash)
         {
             Dispatcher.UIThread.Post(() =>
             {

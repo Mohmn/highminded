@@ -46,9 +46,9 @@ Get the appropriate binary for your platform from the [release page](https://git
 
 | Bind                           | Action                                                                                                         |
 |--------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `Shift` + `\`                  | Toggle Window Visibility                                                                                       |
-| `Shift` + `S`                  | Capture screenshot and send to LLM                                                                             |
-| `Shift` + `A`                  | Capture audio and send to LLM                                                                                  |
+| `Alt` + `Shift` + `\`          | Toggle Window Visibility                                                                                       |
+| `Alt` + `Shift` + `S`          | Capture screenshot and send to LLM                                                                             |
+| `Alt` + `Shift` + `A`           | Capture audio and send to LLM                                                                                  |
 | `Alt` + `Shift` + `Q`          | Quit application                                                                                               |
 | `Ctrl` + `Alt` + `Shift` + `H` | Make windows visible to screenshare.<br> **Note: Application restart is required to make it invisible again.** |
 
