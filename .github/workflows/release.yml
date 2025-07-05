@@ -1,12 +1,20 @@
-name: Build
+name: build highminded
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  release:
-    types: [ published ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      prerelease:
+        description: 'Mark as pre-release'
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   build:
