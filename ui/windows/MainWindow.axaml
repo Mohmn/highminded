@@ -39,17 +39,17 @@
                     <Border Background="Black" BorderBrush="#19ffffff" BorderThickness="2" CornerRadius="5"
                             Margin="0 0 10 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Spacing="5" Margin="10 0">
-                            <TextBlock FontSize="12" Text="Hide:" />
-                            <TextBlock FontSize="12" Text="{Binding HideShortcutKey}" />
+                                    Spacing="5" Margin="6 0">
+                            <TextBlock FontSize="10" Text="Hide:" />
+                            <TextBlock FontSize="10" Text="{Binding HideShortcutKey}" />
                         </StackPanel>
                     </Border>
                     <Border Background="Black" BorderBrush="#19ffffff" BorderThickness="2" CornerRadius="5"
                             Margin="0 0 10 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Spacing="5" Margin="10 0">
-                            <TextBlock FontSize="12" Text="Screen:" />
-                            <TextBlock FontSize="12" Text="{Binding ScreenshotShortcutKey}" />
+                                    Spacing="5" Margin="6 0">
+                            <TextBlock FontSize="10" Text="Screen:" />
+                            <TextBlock FontSize="10" Text="{Binding ScreenshotShortcutKey}" />
                         </StackPanel>
                     </Border>
                     <Border
@@ -59,9 +59,9 @@
                         BorderThickness="2" CornerRadius="5"
                         Margin="0 0 10 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Spacing="5" Margin="10 0">
-                            <TextBlock FontSize="12" Text="Audio:" />
-                            <TextBlock FontSize="12" Text="{Binding AudioShortcutKey}" />
+                                    Spacing="5" Margin="6 0">
+                            <TextBlock FontSize="10" Text="Audio:" />
+                            <TextBlock FontSize="10" Text="{Binding AudioShortcutKey}" />
                         </StackPanel>
                     </Border>
                     <Border
@@ -71,9 +71,9 @@
                         BorderThickness="2" CornerRadius="5"
                         Margin="0 0 10 0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Spacing="5" Margin="10 0">
-                            <TextBlock FontSize="12" Text="Audio:" />
-                            <TextBlock FontSize="12" Text="{Binding AudioShortcutKey}" />
+                                    Spacing="5" Margin="6 0">
+                            <TextBlock FontSize="10" Text="Audio:" />
+                            <TextBlock FontSize="10" Text="{Binding AudioShortcutKey}" />
                         </StackPanel>
                     </Border>
                     <Button Name="ChatBtn" Background="Transparent" Click="ChatBtnClick">
