@@ -7,8 +7,8 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using highminded.ui.controls;
 using highminded.utils;
-using SharpHook;
 using SharpHook.Data;
+using KeyBinding = highminded.utils.KeyBinding;
 
 namespace highminded.ui.windows;
 
@@ -32,7 +32,7 @@ public partial class MainWindow : Window
     private readonly SettingsUserControl _settingsUserControl = new SettingsUserControl();
 
     // Hotkey
-    private readonly TaskPoolGlobalHook _hook = new TaskPoolGlobalHook();
+    private readonly PreciseKeyBindings _keyBindings = new PreciseKeyBindings();
 
     public MainWindow()
     {
@@ -42,9 +42,7 @@ public partial class MainWindow : Window
         UControl.Content = _chatUserControl;
         ChatBtnActive();
         HideOverlay();
-        // Global Hotkey
-        _hook.KeyPressed += OnKeyPressed;
-        _hook.RunAsync();
+        RegisterKeyBindings();
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -141,50 +139,21 @@ public partial class MainWindow : Window
         Hide();
     }
 
-    private void OnKeyPressed(object? sender, KeyboardHookEventArgs e)
+    private void RegisterKeyBindings()
     {
-        bool hasCtrl = (e.RawEvent.Mask & EventMask.Ctrl) != EventMask.None;
-        bool hasAlt = (e.RawEvent.Mask & EventMask.Alt) != EventMask.None;
-        bool hasShift = (e.RawEvent.Mask & EventMask.Shift) != EventMask.None;
-        bool hasH = e.Data.KeyCode == KeyCode.VcH;
-        bool hasBackslash = e.Data.KeyCode == KeyCode.VcBackslash;
-        bool hasA = e.Data.KeyCode == KeyCode.VcA;
-        bool hasS = e.Data.KeyCode == KeyCode.VcS;
-        bool hasQ = e.Data.KeyCode == KeyCode.VcQ;
+        _keyBindings.AddKeyBinding(
+            new KeyBinding(KeyCode.VcH, ModifierKey.Control, ModifierKey.Alt, ModifierKey.Shift),
+            () => Dispatcher.UIThread.Post(ShowOverlay)
+        );
 
-        if (hasCtrl && hasShift && hasAlt && hasH)
-        {
-            ShowOverlay();
-        }
+        _keyBindings.AddKeyBinding(
+            new KeyBinding(KeyCode.VcQ, ModifierKey.Alt, ModifierKey.Shift),
+            () => Dispatcher.UIThread.Post(() => Environment.Exit(0))
+        );
 
-        if (hasAlt && hasShift && hasS)
-        {
-            Dispatcher.UIThread.Post(() => { _chatUserControl.SendScreenshot(); });
-        }
-
-        if (hasAlt && hasShift && hasA)
-        {
-            Dispatcher.UIThread.Post(() =>
-            {
-                if (!InMemoryDb.Obj.MainViewModel.IsRecording)
-                {
-                    _chatUserControl.StartRecord();
-                }
-                else
-                {
-                    _chatUserControl.StopRecord();
-                }
-            });
-        }
-
-        if (hasAlt && hasShift && hasQ)
-        {
-            Dispatcher.UIThread.Post(() => { Environment.Exit(0); });
-        }
-
-        if (hasAlt && hasShift && hasBackslash)
-        {
-            Dispatcher.UIThread.Post(() =>
+        _keyBindings.AddKeyBinding(
+            new KeyBinding(KeyCode.VcBackslash, ModifierKey.Alt, ModifierKey.Shift),
+            () => Dispatcher.UIThread.Post(() =>
             {
                 if (WindowState == WindowState.Minimized || !IsVisible)
                 {
@@ -197,7 +166,29 @@ public partial class MainWindow : Window
                 {
                     Hide();
                 }
-            });
-        }
+            })
+        );
+
+        _keyBindings.AddKeyBinding(
+            new KeyBinding(KeyCode.VcA, ModifierKey.Alt, ModifierKey.Shift),
+            () => Dispatcher.UIThread.Post(() =>
+            {
+                if (!InMemoryDb.Obj.MainViewModel.IsRecording)
+                {
+                    _chatUserControl.StartRecord();
+                }
+                else
+                {
+                    _chatUserControl.StopRecord();
+                }
+            })
+        );
+
+        _keyBindings.AddKeyBinding(
+            new KeyBinding(KeyCode.VcS, ModifierKey.Alt, ModifierKey.Shift),
+            () => Dispatcher.UIThread.Post(() => _chatUserControl.SendScreenshot())
+        );
+
+        _keyBindings.Start();
     }
 }
