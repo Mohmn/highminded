@@ -17,5 +17,5 @@ public partial class MainViewModel : ObservableObject
     private string _audioShortcutKey = OperatingSystem.IsMacOS() ? "OPTION + SHIFT + A" : "ALT + SHIFT + A";
 
     [ObservableProperty] private bool _isRecording = false;
-    [ObservableProperty] private bool _isHidden = true;
+    [ObservableProperty] private bool _isVisibleOnScreenshare = false;
 }

@@ -102,6 +102,8 @@ public partial class MainWindow : Window
                 break;
             }
         }
+
+        InMemoryDb.Obj.MainViewModel.IsVisibleOnScreenshare = true;
     }
 
     private void HideOverlay()
@@ -132,6 +134,8 @@ public partial class MainWindow : Window
                 break;
             }
         }
+
+        InMemoryDb.Obj.MainViewModel.IsVisibleOnScreenshare = false;
     }
 
     private void HideBtnClick(object? sender, RoutedEventArgs e)
@@ -143,7 +147,17 @@ public partial class MainWindow : Window
     {
         _keyBindings.AddKeyBinding(
             new KeyBinding(KeyCode.VcH, ModifierKey.Control, ModifierKey.Alt, ModifierKey.Shift),
-            () => Dispatcher.UIThread.Post(ShowOverlay)
+            () => Dispatcher.UIThread.Post(() =>
+            {
+                if (InMemoryDb.Obj.MainViewModel.IsVisibleOnScreenshare)
+                {
+                    HideOverlay();
+                }
+                else
+                {
+                    ShowOverlay();
+                }
+            })
         );
 
         _keyBindings.AddKeyBinding(
