@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Input;
+using highminded.models;
 using highminded.utils;
 using OpenAI.Chat;
 using Markdig;
@@ -16,14 +17,18 @@ namespace highminded.ui.controls;
 
 public partial class ChatUserControl : UserControl
 {
-    private readonly MarkdownPipeline _pipeline = null!;
-    private AudioCapture _audioCapture = null!;
+    private readonly ChatViewModel _model;
+    private readonly MarkdownPipeline _pipeline;
+    private readonly AudioCapture _audioCapture;
 
     public ChatUserControl()
     {
         InitializeComponent();
-        _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build();
+        DataContext = InMemoryDb.Obj.ChatViewModel;
+
         _audioCapture = new AudioCapture();
+        _model = InMemoryDb.Obj.ChatViewModel;
+        _pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().UseColorCode().Build();
     }
 
     public void StartRecord()
@@ -33,42 +38,15 @@ public partial class ChatUserControl : UserControl
         var dirPath = Path.Combine(Environment.CurrentDirectory, "audio");
         var filePath = Path.Combine(dirPath, fileName);
         Directory.CreateDirectory(dirPath);
+        InMemoryDb.Obj.MainViewModel.IsRecording = true;
         _audioCapture.StartRecording(filePath);
     }
 
     public void StopRecord()
     {
-        if (_audioCapture != null)
-        {
-            _audioCapture.StopRecording();
-            SendAudio();
-        }
-    }
-
-    public async void SendAudio()
-    {
-        try
-        {
-            var dirPath = Path.Combine(Environment.CurrentDirectory, "audio");
-            var latestAudio = new DirectoryInfo(dirPath).GetFiles().OrderByDescending(f => f.LastWriteTime).First(); 
-            var filePath = Path.Combine(dirPath, latestAudio.Name);
-            var audioFileBytes = await File.ReadAllBytesAsync(filePath);
-            var audioBytes = BinaryData.FromBytes(audioFileBytes);
-
-            List<ChatMessage> messages =
-            [
-                new UserChatMessage(
-                    ChatMessageContentPart.CreateTextPart(InMemoryDb.Obj.SettingsManager.Settings.AudioPrompt),
-                    ChatMessageContentPart.CreateInputAudioPart(audioBytes, ChatInputAudioFormat.Wav)
-                )
-            ];
-
-            await ProcessChatStreamAsync(messages);
-        }
-        catch (Exception err)
-        {
-            ResultBlock.Text = err.Message;
-        }
+        _audioCapture.StopRecording();
+        InMemoryDb.Obj.MainViewModel.IsRecording = false;
+        SendAudio();
     }
 
     public async void SendScreenshot()
@@ -99,7 +77,33 @@ public partial class ChatUserControl : UserControl
         }
         catch (Exception err)
         {
-            ResultBlock.Text = err.Message;
+            _model.Content = err.Message;
+        }
+    }
+
+    private async void SendAudio()
+    {
+        try
+        {
+            var dirPath = Path.Combine(Environment.CurrentDirectory, "audio");
+            var latestAudio = new DirectoryInfo(dirPath).GetFiles().OrderByDescending(f => f.LastWriteTime).First();
+            var filePath = Path.Combine(dirPath, latestAudio.Name);
+            var audioFileBytes = await File.ReadAllBytesAsync(filePath);
+            var audioBytes = BinaryData.FromBytes(audioFileBytes);
+
+            List<ChatMessage> messages =
+            [
+                new UserChatMessage(
+                    ChatMessageContentPart.CreateTextPart(InMemoryDb.Obj.SettingsManager.Settings.AudioPrompt),
+                    ChatMessageContentPart.CreateInputAudioPart(audioBytes, ChatInputAudioFormat.Wav)
+                )
+            ];
+
+            await ProcessChatStreamAsync(messages);
+        }
+        catch (Exception err)
+        {
+            _model.Content = err.Message;
         }
     }
 
@@ -109,15 +113,14 @@ public partial class ChatUserControl : UserControl
         {
             if (e.Key != Key.Enter) return;
 
-            var prompt = PromptBox.Text;
-            if (prompt is null) return;
-            PromptBox.Clear();
-
+            var prompt = _model.Prompt;
+            if (prompt == string.Empty) return;
+            _model.Prompt = string.Empty;
             await ProcessChatStreamAsync(prompt);
         }
         catch (Exception err)
         {
-            ResultBlock.Text = err.Message;
+            _model.Content = err.Message;
         }
     }
 
@@ -140,7 +143,7 @@ public partial class ChatUserControl : UserControl
             responseBuilder.Append(token);
 
             var html = Markdig.Markdown.ToHtml(responseBuilder.ToString(), _pipeline);
-            ResultBlock.Text = html;
+            _model.Content = html;
         }
     }
 }

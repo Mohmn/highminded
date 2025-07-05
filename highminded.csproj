@@ -27,14 +27,15 @@
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="IconPacks.Avalonia" Version="1.0.0" />
         <PackageReference Include="IconPacks.Avalonia.Lucide" Version="1.0.0" />
         <PackageReference Include="Markdig" Version="0.41.3" />
         <PackageReference Include="Markdown.ColorCode" Version="3.0.0" />
-        <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="OpenAI" Version="2.2.0-beta.4" />
         <PackageReference Include="SharpHook" Version="6.1.2" />
         <PackageReference Include="SharpHook.Reactive" Version="6.1.2" />
+        <PackageReference Include="SoundFlow" Version="1.1.1" />
     </ItemGroup>
 
     <ItemGroup>

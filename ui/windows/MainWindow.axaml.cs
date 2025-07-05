@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using highminded.ui.controls;
+using highminded.utils;
 using SharpHook;
 using SharpHook.Data;
 
@@ -36,13 +37,14 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        DataContext = InMemoryDb.Obj.MainViewModel;
+
         UControl.Content = _chatUserControl;
         ChatBtnActive();
         HideOverlay();
         // Global Hotkey
         _hook.KeyPressed += OnKeyPressed;
         _hook.RunAsync();
-        _chatUserControl.SendAudio();
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -72,56 +74,6 @@ public partial class MainWindow : Window
     {
         ChatBtn.Background = new SolidColorBrush(Colors.Transparent);
         SettingsBtn.Background = new SolidColorBrush(Color.FromArgb(25, 255, 255, 255));
-    }
-
-    private void OnKeyPressed(object? sender, KeyboardHookEventArgs e)
-    {
-        bool hasCtrl = (e.RawEvent.Mask & EventMask.Ctrl) != EventMask.None;
-        bool hasAlt = (e.RawEvent.Mask & EventMask.Alt) != EventMask.None;
-        bool hasShift = (e.RawEvent.Mask & EventMask.Shift) != EventMask.None;
-        bool hasH = e.Data.KeyCode == KeyCode.VcH;
-        bool hasBackslash = e.Data.KeyCode == KeyCode.VcBackslash;
-        bool hasA = e.Data.KeyCode == KeyCode.VcA;
-        bool hasS = e.Data.KeyCode == KeyCode.VcS;
-        bool hasQ = e.Data.KeyCode == KeyCode.VcQ;
-
-        if (hasCtrl && hasShift && hasAlt && hasH)
-        {
-            ShowOverlay();
-        }
-
-        if (hasShift && hasS)
-        {
-            Dispatcher.UIThread.Post(() => { _chatUserControl.SendScreenshot(); });
-        }
-
-        if (hasShift && hasA)
-        {
-            Dispatcher.UIThread.Post(() => { _chatUserControl.StartRecord(); });
-        }
-
-        if (hasAlt && hasShift && hasQ)
-        {
-            Dispatcher.UIThread.Post(() => { Environment.Exit(0); });
-        }
-
-        if (hasShift && hasBackslash)
-        {
-            Dispatcher.UIThread.Post(() =>
-            {
-                if (WindowState == WindowState.Minimized || !IsVisible)
-                {
-                    Show();
-                    WindowState = WindowState.Normal;
-                    Activate();
-                    Topmost = true;
-                }
-                else
-                {
-                    Hide();
-                }
-            });
-        }
     }
 
     private void ShowOverlay()
@@ -187,5 +139,55 @@ public partial class MainWindow : Window
     private void HideBtnClick(object? sender, RoutedEventArgs e)
     {
         Hide();
+    }
+
+    private void OnKeyPressed(object? sender, KeyboardHookEventArgs e)
+    {
+        bool hasCtrl = (e.RawEvent.Mask & EventMask.Ctrl) != EventMask.None;
+        bool hasAlt = (e.RawEvent.Mask & EventMask.Alt) != EventMask.None;
+        bool hasShift = (e.RawEvent.Mask & EventMask.Shift) != EventMask.None;
+        bool hasH = e.Data.KeyCode == KeyCode.VcH;
+        bool hasBackslash = e.Data.KeyCode == KeyCode.VcBackslash;
+        bool hasA = e.Data.KeyCode == KeyCode.VcA;
+        bool hasS = e.Data.KeyCode == KeyCode.VcS;
+        bool hasQ = e.Data.KeyCode == KeyCode.VcQ;
+
+        if (hasCtrl && hasShift && hasAlt && hasH)
+        {
+            ShowOverlay();
+        }
+
+        if (hasShift && hasS)
+        {
+            Dispatcher.UIThread.Post(() => { _chatUserControl.SendScreenshot(); });
+        }
+
+        if (hasShift && hasA)
+        {
+            Dispatcher.UIThread.Post(() => { _chatUserControl.StartRecord(); });
+        }
+
+        if (hasAlt && hasShift && hasQ)
+        {
+            Dispatcher.UIThread.Post(() => { Environment.Exit(0); });
+        }
+
+        if (hasShift && hasBackslash)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (WindowState == WindowState.Minimized || !IsVisible)
+                {
+                    Show();
+                    WindowState = WindowState.Normal;
+                    Activate();
+                    Topmost = true;
+                }
+                else
+                {
+                    Hide();
+                }
+            });
+        }
     }
 }

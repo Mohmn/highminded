@@ -2,39 +2,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:highminded.models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="highminded.ui.controls.SettingsUserControl">
+             x:Class="highminded.ui.controls.SettingsUserControl"
+             x:DataType="vm:SettingsViewModel">
 
-    <Grid Margin="15" RowSpacing="10" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-        
+    <Grid Margin="15" RowSpacing="10" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+          ColumnDefinitions="*,*">
+
         <StackPanel Grid.Row="0" Grid.Column="0">
             <TextBlock Text="Model" />
-            <TextBox Name="ModelTextBox" />
+            <TextBox Text="{Binding Model}" />
         </StackPanel>
-        
+
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock Text="API URL" />
-            <TextBox Name="ApiUrlTextBox" />
+            <TextBox Text="{Binding ApiUrl}" />
         </StackPanel>
-        
+
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <TextBlock Text="API Key" />
-            <TextBox Name="ApiKeyTextBox" PasswordChar="*" />
+            <TextBox PasswordChar="*" Text="{Binding ApiKey}" />
         </StackPanel>
 
-      <StackPanel Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="2">
-        <TextBlock Text="Screenshot Prompt" />
-        <TextBox Name="ScreenshotPromptTextBox" TextWrapping="Wrap" MinLines="3" MaxLines="3"/>
-      </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Text="Screenshot Prompt" />
+            <TextBox TextWrapping="Wrap" MinLines="3" MaxLines="3" Text="{Binding ScreenshotPrompt}" />
+        </StackPanel>
 
-      <StackPanel Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="2">
-        <TextBlock Text="Audio Prompt" />
-        <TextBox Name="AudioPromptTextbox" TextWrapping="Wrap" MinLines="3" MaxLines="3"/>
-      </StackPanel>
-      
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Text="Audio Prompt" />
+            <TextBox TextWrapping="Wrap" MinLines="3" MaxLines="3" Text="{Binding AudioPrompt}" />
+        </StackPanel>
+
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
-            <Button Name="SaveSettingsBtn" Content="Save" Click="SaveSettingsBtn_OnClick"/>
-        </StackPanel> 
-        
+            <Button Content="Save" Click="SaveSettingsBtn_OnClick" />
+        </StackPanel>
+
     </Grid>
 </UserControl>

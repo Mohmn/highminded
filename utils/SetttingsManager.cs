@@ -4,27 +4,17 @@ using System.Text.Json;
 
 namespace highminded.utils;
 
-public class AppSettings
-{
-    public string Model { get; set; }
-    public string ApiURL { get; set; }
-    public string ApiKey { get; set; }
-    public string ScreenshotPrompt { get; set; }
-    public string AudioPrompt { get; set; }
-
-}
-
 public class SettingsManager<T> where T : class, new()
 {
     private readonly string _settingsPath;
     public T Settings { get; internal set; }
 
-    public SettingsManager(string appName = "highminded")
+    public SettingsManager()
     {
-       _settingsPath = Path.Combine(Environment.CurrentDirectory, "settings.json");
-       Settings = Load();
-    } 
-    
+        _settingsPath = Path.Combine(Environment.CurrentDirectory, "settings.json");
+        Settings = Load();
+    }
+
     private T Load()
     {
         if (!File.Exists(_settingsPath))

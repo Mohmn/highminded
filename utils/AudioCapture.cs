@@ -1,51 +1,27 @@
-﻿using NAudio.CoreAudioApi;
-using NAudio.Wave;
+﻿using System.IO;
+using SoundFlow.Backends.MiniAudio;
+using SoundFlow.Components;
+using SoundFlow.Enums;
 
 namespace highminded.utils;
 
 public class AudioCapture
 {
-    private WasapiLoopbackCapture capture;
-    private WaveFileWriter writer;
-    private string outputFilePath;
+    private readonly MiniAudioEngine _audioEngine = new(48000, Capability.Loopback);
+    private Stream? _fileStream;
+    private Recorder? _recorder;
 
-    public AudioCapture()
+    public void StartRecording(string filePath)
     {
-        capture = new WasapiLoopbackCapture();
-    }
-
-    public void StartRecording(string outPath)
-    {
-        writer = new WaveFileWriter(outPath, capture.WaveFormat);
-        capture.DataAvailable += Capture_DataAvailable;
-        capture.RecordingStopped += Capture_RecordingStopped;
-        capture.StartRecording();
+        _fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+        _recorder = new Recorder(_fileStream, sampleRate: 48000);
+        _recorder.StartRecording();
     }
 
     public void StopRecording()
     {
-        capture.StopRecording();
-    }
-
-    public bool IsRecording()
-    {
-        if (capture.CaptureState == CaptureState.Capturing || capture.CaptureState == CaptureState.Starting)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private void Capture_DataAvailable(object sender, WaveInEventArgs e)
-    {
-        writer.Write(e.Buffer, 0, e.BytesRecorded);
-    }
-
-    private void Capture_RecordingStopped(object sender, StoppedEventArgs e)
-    {
-        writer.Flush();
-        writer.Dispose();
-        capture.Dispose();
+        _recorder?.StopRecording();
+        _recorder?.Dispose();
+        _fileStream?.Dispose();
     }
 }
