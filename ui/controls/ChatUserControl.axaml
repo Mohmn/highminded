@@ -11,6 +11,7 @@
         <HtmlPanel Grid.Row="0" BaseStylesheet="* { font: Inter; color: white; }"
                    IsContextMenuEnabled="False" IsSelectionEnabled="False" Text="{Binding Content}" />
         <TextBox Grid.Row="1" CornerRadius="5" TextWrapping="Wrap"
+                 Watermark="{Binding PromptWatermark}"
                  KeyDown="PromptBox_OnKeyDown" Text="{Binding Prompt}" />
     </Grid>
 
