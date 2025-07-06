@@ -38,7 +38,9 @@
 
 ## Installation
 
-Get the appropriate binary for your platform from the [release page](https://github.com/tuxdotrs/highminded/releases).
+Get the appropriate binary for your platform from
+the [release page](https://github.com/tuxdotrs/highminded/releases).<br>
+On the first launch make sure to provide relevant information in the settings tab.
 
 <!-- KEYBINDINGS -->
 
