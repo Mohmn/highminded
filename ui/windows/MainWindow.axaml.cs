@@ -106,6 +106,7 @@ public partial class MainWindow : Window
         InMemoryDb.Obj.MainViewModel.IsVisibleOnScreenshare = true;
     }
 
+    // Here the sauce lol, Cheers to our curiosity!
     private void HideOverlay()
     {
         var handle = TryGetPlatformHandle();
