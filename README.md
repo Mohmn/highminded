@@ -1,7 +1,7 @@
 <div align="center">
   <h3 align="center">High Minded</h3>
   <p align="center">
-    Your undectable personal assistance
+    Your undetectable personal assistance
   </p>
   <p align="center">
     <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/tuxdotrs/highminded">
@@ -27,7 +27,7 @@
 
 ## Features
 
-- [x] Undectable Window - The application window remains hidden during screen sharing, ensuring complete discretion.
+- [x] undetectable Window - The application window remains hidden during screen sharing, ensuring complete discretion.
 - [x] Screen Capture - Capture your screen and receive relevant insights or assistance based on the content.
 - [x] BYO Model - Bring your own LLM—works with any model supporting the OpenAI-compatible API.
 - [x] Custom Prompt - Define your own prompt to guide the assistant according to your specific needs.
