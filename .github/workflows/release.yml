@@ -50,7 +50,7 @@ jobs:
       run: dotnet build --no-restore --configuration Release
     
     - name: Publish
-      if: github.event_name == 'release'
+      if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
       run: |
         dotnet publish \
           --configuration Release \
