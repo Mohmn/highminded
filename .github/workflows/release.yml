@@ -20,7 +20,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         include:
           - os: windows-latest
             runtime: win-x64
@@ -28,6 +28,10 @@ jobs:
           - os: macos-latest
             runtime: osx-arm64
             artifact-name: macos-arm64
+          - os: ubuntu-latest
+            runtime: linux-x64
+            artifact-name: linux-x64
+
     
     runs-on: ${{ matrix.os }}
     
