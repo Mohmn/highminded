@@ -20,11 +20,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
         include:
-          - os: windows-latest
-            runtime: win-x64
-            artifact-name: windows-x64
           - os: macos-latest
             runtime: osx-arm64
             artifact-name: macos-arm64
