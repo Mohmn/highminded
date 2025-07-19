@@ -51,6 +51,7 @@ jobs:
     
     - name: Publish
       if: github.event_name == 'workflow_dispatch'
+      shell: bash
       run: |
         dotnet publish \
           --configuration Release \
